@@ -1,14 +1,62 @@
-# astrbot-plugin-helloworld
+# MeowTalk
 
-AstrBot 插件模板 / A template plugin for AstrBot plugin feature
+MeowTalk 是一个面向群聊的 AstrBot 插件，可在群聊沉寂或到达指定时间点时，从语料库中随机发送一句话。
 
-> [!NOTE]
-> This repo is just a template of [AstrBot](https://github.com/AstrBotDevs/AstrBot) Plugin.
-> 
-> [AstrBot](https://github.com/AstrBotDevs/AstrBot) is an agentic assistant for both personal and group conversations. It can be deployed across dozens of mainstream instant messaging platforms, including QQ, Telegram, Feishu, DingTalk, Slack, LINE, Discord, Matrix, etc. In addition, it provides a reliable and extensible conversational AI infrastructure for individuals, developers, and teams. Whether you need a personal AI companion, an intelligent customer support agent, an automation assistant, or an enterprise knowledge base, AstrBot enables you to quickly build AI applications directly within your existing messaging workflows.
+## 功能
 
-# Supports
+- 群聊沉寂超过指定时长后自动发送一句语料。
+- 每日可配置一个或多个 `HH:MM` 定时推送时间。
+- 每个订阅群聊拥有独立的沉寂、免打扰、定时和语料配置。
+- 免打扰时段支持跨越午夜。
+- 沉寂唤醒和定时推送分别支持 `+/-` 秒级抖动。
+- 设置页面使用大文本框编辑语料，每行代表一句话。
+- 同时兼容 `sentences:` YAML 语料格式。
 
-- [AstrBot Repo](https://github.com/AstrBotDevs/AstrBot)
-- [AstrBot Plugin Development Docs (Chinese)](https://docs.astrbot.app/dev/star/plugin-new.html)
-- [AstrBot Plugin Development Docs (English)](https://docs.astrbot.app/en/dev/star/plugin-new.html)
+## 快速开始
+
+1. 在 AstrBot 中启用 MeowTalk。
+2. AstrBot 管理员在目标群发送 `/meowtalk subscribe`。
+3. 打开 AstrBot 插件设置页面，编辑自动创建的群聊订阅条目。
+4. 在“本群专属语料库”中每行填写一句话，或留空以使用“默认语料库”。
+
+订阅命令会保存当前群的 `unified_msg_origin`（UMO），确保主动消息被发送到正确的平台、机器人实例和群聊。
+
+## 命令
+
+- `/meowtalk subscribe`：订阅或重新启用当前群，仅 AstrBot 管理员可用。
+- `/meowtalk unsubscribe`：删除当前群订阅，仅 AstrBot 管理员可用。
+- `/meowtalk status`：查看当前群的生效配置。
+- `/meowtalk test`：立即发送一句随机语料，仅 AstrBot 管理员可用。
+
+## 语料格式
+
+插件设置页面中的语料文本框支持每行一句：
+
+```text
+今天也要好好聊天。
+有人在吗？
+记得喝水。
+```
+
+也可以粘贴 YAML：
+
+```yaml
+sentences:
+  - 今天也要好好聊天。
+  - 有人在吗？
+```
+
+空行会被忽略。群聊专属语料优先于默认语料。
+
+## 调度规则
+
+- 只有订阅列表中的群聊会生效。
+- 沉寂倒计时只会由免打扰时段外的新群消息启动。
+- 倒计时期间出现新消息时，会重新计算等待时间和抖动。
+- 发送一次沉寂语料后停止等待，直到出现下一条非机器人自身消息。
+- 进入和离开免打扰时段都会清空沉寂状态；免打扰期间的消息不会启动倒计时。
+- 定时推送不受免打扰时段限制。
+- 定时抖动对同一个每日时间点保持稳定，避免插件重载后重复推送。
+- 免打扰开始和结束时间相同时，表示全天免打扰。
+
+插件统一使用 AstrBot 主设置中的时区。

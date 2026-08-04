@@ -1,0 +1,97 @@
+{
+  "default_sentences": {
+    "description": "默认语料库（每行一句，也支持 sentences: YAML 格式）",
+    "type": "text",
+    "hint": "群聊未单独设置语料时使用。空行会被忽略。",
+    "default": ""
+  },
+  "groups": {
+    "description": "群聊订阅与独立配置",
+    "type": "template_list",
+    "templates": {
+      "group": {
+        "name": "群聊订阅",
+        "hint": "订阅条目存在即表示该群已订阅。可通过 /meowtalk subscribe 自动创建。",
+        "display_item": "group_name",
+        "items": {
+          "enabled": {
+            "description": "启用此群",
+            "type": "bool",
+            "default": true
+          },
+          "group_name": {
+            "description": "群名称（仅用于识别）",
+            "type": "string",
+            "default": ""
+          },
+          "group_id": {
+            "description": "群 ID",
+            "type": "string",
+            "default": ""
+          },
+          "umo": {
+            "description": "统一消息来源（UMO）",
+            "type": "string",
+            "hint": "建议使用群内 /meowtalk subscribe 自动填写，UMO 可区分不同平台和机器人。",
+            "default": ""
+          },
+          "idle_enabled": {
+            "description": "启用群聊沉寂唤醒",
+            "type": "bool",
+            "default": true
+          },
+          "idle_timeout_minutes": {
+            "description": "沉寂等待时长（分钟）",
+            "type": "float",
+            "hint": "群友发言后，连续没有新消息达到此时长才会发送语料。",
+            "default": 30.0
+          },
+          "idle_jitter_seconds": {
+            "description": "沉寂唤醒回复抖动（秒）",
+            "type": "int",
+            "hint": "实际等待时间会在设定时长上下浮动。",
+            "default": 0
+          },
+          "quiet_enabled": {
+            "description": "启用免打扰时间",
+            "type": "bool",
+            "default": true
+          },
+          "quiet_start": {
+            "description": "免打扰开始时间（HH:MM）",
+            "type": "string",
+            "default": "23:00"
+          },
+          "quiet_end": {
+            "description": "免打扰结束时间（HH:MM）",
+            "type": "string",
+            "default": "07:00"
+          },
+          "schedule_enabled": {
+            "description": "启用定时推送",
+            "type": "bool",
+            "default": false
+          },
+          "schedule_times": {
+            "description": "每日推送时间",
+            "type": "text",
+            "hint": "每行一个 HH:MM，例如 09:00 和 18:30。",
+            "default": ""
+          },
+          "schedule_jitter_seconds": {
+            "description": "定时推送回复抖动（秒）",
+            "type": "int",
+            "default": 0
+          },
+          "sentences": {
+            "description": "本群专属语料库",
+            "type": "text",
+            "hint": "每行一句；留空时使用默认语料库，也支持 sentences: YAML 格式。",
+            "default": ""
+          }
+        }
+      }
+    },
+    "default": []
+  }
+}
